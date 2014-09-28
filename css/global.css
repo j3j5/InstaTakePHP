@@ -1,16 +1,24 @@
 @charset "UTF-8";
 
 .site-wrapper {
-	margin: 5% 5% 0%;
+	margin: 35px 150px 0px 100px;
 }
 
-.mastfoot {
-	margin-top: 20%;
+.jumbotron {
+	text-align: center;
+}
+
+.slider-cont {
+	margin-bottom: 10px;
 }
 
 #search {
-	max-width: 225px;
-	display: inline-block;
+	max-width: 500px;
+/* 	display: inline-block; */
+}
+
+.mastfoot {
+	margin-top: 50px;
 }
 
 .spinner {
