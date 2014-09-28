@@ -8,7 +8,6 @@ var $search = $("#search"),
 	$errorAlert = $("#downloadFailed");
 
 $downloadBtn.click(function() {
-	console.log('yooo');
 	if($search.val().length > 0) {
 		// Show the spinner
 		$downloadBtn.toggleClass('active');
@@ -30,6 +29,19 @@ $downloadBtn.click(function() {
 			}
 		});
 	} else {
+		$("#errorMsg").text("You need to add a username to be able to back up its images.")
+		$errorAlert.show();
+	}
+});
 
+$("#ex7").slider();
+$("#ex7-enabled").click(function() {
+	if(this.checked) {
+		// With JQuery
+		$("#ex7").slider("enable");
+	}
+	else {
+		// With JQuery
+		$("#ex7").slider("disable");
 	}
 });
