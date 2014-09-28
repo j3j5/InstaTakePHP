@@ -1,0 +1,50 @@
+@charset "UTF-8";
+
+.site-wrapper {
+	margin: 5% 5% 0%;
+}
+
+.mastfoot {
+	margin-top: 20%;
+}
+
+#search {
+	max-width: 225px;
+	display: inline-block;
+}
+
+.spinner {
+	display: inline-block;
+	opacity: 0;
+	width: 0;
+
+	-webkit-transition: opacity 0.25s, width 0.25s;
+	-moz-transition: opacity 0.25s, width 0.25s;
+	-o-transition: opacity 0.25s, width 0.25s;
+	transition: opacity 0.25s, width 0.25s;
+}
+
+.has-spinner.active {
+	cursor:progress;
+}
+
+.has-spinner.active .spinner {
+	opacity: 1;
+	width: auto; /* This doesn't work, just fix for unknown width elements */
+}
+
+.has-spinner.btn-mini.active .spinner {
+	width: 10px;
+}
+
+.has-spinner.btn-small.active .spinner {
+	width: 13px;
+}
+
+.has-spinner.btn.active .spinner {
+	width: 16px;
+}
+
+.has-spinner.btn-large.active .spinner {
+	width: 19px;
+}
