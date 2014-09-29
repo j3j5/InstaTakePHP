@@ -17,6 +17,6 @@ if(isset($_REQUEST['max_pics']) && intval($_REQUEST['max_pics'])) {
 }
 
 
-instagram($_REQUEST['username']);
+$result = instagram($_REQUEST['username']);
 
-echo json_encode(array('result'=>200, 'msg'=> 'All the data has been saved.'));
+echo json_encode($result);
