@@ -8,10 +8,10 @@ function instagram($username) {
 	global $folder_path;
 	global $image_counter, $max_number_images;
 	// Check whether the folder is writable
-	if(is_writable($folder_path)) {
-		$pic_folder = $folder_path . $username;
 		if(!is_dir($pic_folder)) {
 			$result = mkdir($pic_folder);
+	if(is_writable($folder_path .'/instagram/')) {
+		$pic_folder = "$folder_path/instagram/$username";
 			if(!$result) {
 				$error = 'The folder ' . $pic_folder . ' could not be created.';
 				return array('result' => 403, 'error' => $error);
