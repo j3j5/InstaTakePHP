@@ -4,23 +4,6 @@ class TwitterApi extends tmhOAuth {
 
 	private $api_version = '1.1';
 
-	// Set log-levels for the possible http response codes
-	protected $http_response_code_levels = array(
-		200 => LOG_INFO,
-		304 => LOG_INFO,
-		400 => LOG_WARNING,
-		401 => LOG_NOTICE,
-		403 => LOG_NOTICE,
-		404 => LOG_NOTICE,
-		406 => LOG_WARNING,
-		420 => LOG_NOTICE,
-		429 => LOG_NOTICE,
-		500 => LOG_WARNING,
-		502 => LOG_WARNING,
-		503 => LOG_NOTICE,
-		504 => LOG_NOTICE,
-	);
-
 	private $successful = array(
 		200,
 		304,
@@ -106,7 +89,6 @@ class TwitterApi extends tmhOAuth {
 	 */
 	public function post($url, $parameters = array()) {
 		return $this->request('POST', $this->url($this->api_version . '/' . $url), $parameters);
-
 	}
 
 	/**
@@ -119,14 +101,6 @@ class TwitterApi extends tmhOAuth {
 	public function delete($url, $parameters = array()) {
 		return $this->request('DELETE', $this->url($this->api_version . '/' . $url), $parameters);
 	}
-
-	/**
-	 * Iterate through an endpoint that takes a cursor
-	 */
-// 	public function cursorize($endpoint, $arguments = array())
-// 	{
-// 		return new FastTwitterAPI_Iterator_Cursor($this, $endpoint, $arguments);
-// 	}
 
 	public function cursorize_timeline($endpoint, $arguments = array()) {
 		return new FastTwitterAPI_Iterator_TimelineCursor($this, $endpoint, $arguments);
