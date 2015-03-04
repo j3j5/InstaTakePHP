@@ -11,3 +11,10 @@ require __DIR__ . '/vendor/autoload.php';
  */
 $folder_path = '';
 $max_number_images = 500;
+
+$twitter_settings = array(
+	'consumer_key'               => 'YOUR_CONSUMER_KEY',
+	'consumer_secret'            => 'YOUR_CONSUMER_SECRET',
+	'token'                      => 'A_USER_TOKEN',
+	'secret'                     => 'A_USER_TOKEN_SECRET',
+);
