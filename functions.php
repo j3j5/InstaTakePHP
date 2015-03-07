@@ -1,5 +1,126 @@
 <?php
 
+function twitter($username) {
+	global $twitter_settings, $folder_path;
+
+	$api = new \j3j5\TwitterApio($twitter_settings);
+
+	$tweets = array();
+	$user = array();
+
+	$i = 1;
+	$count = 200;
+
+	foreach($api->get_timeline('statuses/user_timeline', array('screen_name' => $username, 'count' => $count)) as $page) {
+// 		echo "Retrieving page $i" . PHP_EOL;
+		if(is_array($page) ) {
+			$tweets = array_merge($tweets, $page);
+		}
+		$i++;
+	}
+
+	if(empty($tweets) ) {
+		exit;
+	}
+
+	// Create the folder structure
+	$folder_segments = array($folder_path, 'twitter', $username, 'data', 'js');
+	$path = '';
+	foreach($folder_segments AS $tmp_path) {
+		// Remove last '/'
+		if(strpos($tmp_path, DIRECTORY_SEPARATOR, mb_strlen($tmp_path)-1) !== FALSE) {
+			$tmp_path = mb_substr($tmp_path, 0, -1);
+		}
+		$path .= $tmp_path . DIRECTORY_SEPARATOR;
+		if(!is_dir($path) && !mkdir($path) && !is_writable($path)) {
+			echo "Error creating the folder at $path." . PHP_EOL;
+			exit;
+		}
+	}
+	// Remove the trailing DIRECTORY_SEPARATOR
+	$path = mb_substr($path, 0, -1);
+
+	$date_groups = array();
+// 	echo "Sorting tweets" . PHP_EOL;
+	foreach($tweets AS $tweet) {
+		$date_file = date("Y_m", strtotime($tweet['created_at']));
+// 		echo "Adding tweet {$tweet['id']}" . PHP_EOL;
+		if(empty($user) && $tweet['user']['screen_name'] == $username) {
+			$user = $tweet['user'];
+		}
+		if(!isset($date_groups[$date_file])) {
+			$date_groups[$date_file]['date'] = date("Y-m-d", strtotime($tweet['created_at']));
+		}
+		$date_groups[$date_file]['tweets'][] = $tweet;
+	}
+// 	echo 'DONE!'. PHP_EOL;
+
+// 	echo "Writing into files..." . PHP_EOL;
+
+	$index_filename = $path . DIRECTORY_SEPARATOR . "tweet_index.js";
+	$index_text = 'var tweet_index = ';
+	$index_array = array();
+
+	foreach($date_groups AS $date => $data) {
+		$tweets_filename = $path . DIRECTORY_SEPARATOR . "tweets" . DIRECTORY_SEPARATOR . "$date.js";
+		$folder=  "$path" . DIRECTORY_SEPARATOR . "tweets";
+		if(!is_dir($folder) && !mkdir($folder) && !is_writable($folder)) {
+			echo "Error creating the folder at $folder." . PHP_EOL;
+			exit;
+		}
+
+		if(is_file($tweets_filename)) {
+			unlink($tweets_filename);
+		}
+
+		$tweets_text = "Grailbird.data.tweets_$date = ". PHP_EOL;
+		$tweets_text .= json_encode($data['tweets']);
+		file_put_contents($tweets_filename, $tweets_text);
+// 		echo "Done with $tweets_filename. Adding to the index." . PHP_EOL;
+
+		// Add to index
+		$index_array[] = array(
+			"file_name" => "data". DIRECTORY_SEPARATOR ."js". DIRECTORY_SEPARATOR ."tweets". DIRECTORY_SEPARATOR ."$date.js",
+			"year" => date("Y", strtotime($data['date'])),
+			"var_name" => "tweets_$date",
+			"tweet_count" => count($data['tweets']),
+			"month" =>  date("n", strtotime($data['date'])),
+			);
+	}
+	// Write the index
+	$index_text .= json_encode($index_array, JSON_UNESCAPED_SLASHES);
+	file_put_contents($index_filename, $index_text);
+
+	// Write the user_details
+	$user_filename = $path . DIRECTORY_SEPARATOR . "user_details.js";
+	$user_text = "var user_details =  ";
+	$user_array = array(
+		"screen_name" => $username,
+		"full_name" => $user['name'],
+		"bio" => $user['description'],
+		"id" => $user['id'],
+		"created_at" => $user['created_at'],
+	);
+	$user_text .= json_encode($user_array, JSON_UNESCAPED_SLASHES);
+	file_put_contents($user_filename, $user_text);
+
+	// Write the payload_details
+	$payload_filename = $path . DIRECTORY_SEPARATOR . "payload_details.js";
+	$payload_text = "var payload_details =  ";
+	$payload_array = array(
+		"tweets" => 4891,
+		"created_at" => "2015-03-04 00:04:27 +0000",
+		"lang" => isset($user['lang']) ? $user['lang'] : '',
+	);
+
+	$payload_text .= json_encode($payload_array, JSON_UNESCAPED_SLASHES);
+	file_put_contents($payload_filename, $payload_text);
+
+// 	echo "Done!" . PHP_EOL;
+
+	return array('result' => 200, 'msg' => 'Congrats! All files have been downloaded.');
+}
+
 /**
  * Check the folder where it'll download the images and download the URLs from
  * Instagram's endpoint.
