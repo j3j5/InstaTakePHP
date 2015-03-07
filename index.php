@@ -1,20 +1,18 @@
 <?php
-require('config.php');
-// Read the username
-if($_SERVER['REQUEST_URI'] === '/') {
-	include('landing.php');
-	exit;
-}
+include('config.php');
+
+include('routing.php');
+
 require('functions.php');
 
-// Remove the slash from the URI and check whether the provided username is valid
-$username = str_replace('/', '', $_SERVER['REQUEST_URI']);
-if(!is_valid_username($username)) {
-	echo "You must specify a valid username.";
-	exit;
+include(__DIR__ . DIRECTORY_SEPARATOR ."controllers" . DIRECTORY_SEPARATOR ."$controller.php");
+
+if(!is_file(__DIR__ . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "$view.php")) {
+	$view = '404';
 }
 
-$image_counter = 0;
-echo "Downloading...</br>";
-instagram($username);
-echo "Done!";
+include(__DIR__ . DIRECTORY_SEPARATOR ."views" . DIRECTORY_SEPARATOR ."header.php");
+
+include(__DIR__ . DIRECTORY_SEPARATOR ."views" . DIRECTORY_SEPARATOR ."$view.php");
+
+include(__DIR__ . DIRECTORY_SEPARATOR ."views" . DIRECTORY_SEPARATOR ."footer.php");
