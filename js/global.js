@@ -3,6 +3,7 @@
 // });
 
 var $search = $("#search"),
+	$network = $("#network"),
 	$downloadBtn = $("#download"),
 	$successAlert = $("#downloadDone");
 	$errorAlert = $("#downloadFailed");
@@ -14,8 +15,8 @@ $downloadBtn.click(function() {
 
 		$.ajax({
 			url: '/ajax.php',
-			type: 'GET',
-			data: { username: $search.val() },
+			type: 'POST',
+			data: { username: $search.val(), network: $network.val() },
 			success: function(msg) {
 				// Hide the spinner
 				$downloadBtn.toggleClass('active');

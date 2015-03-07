@@ -12,8 +12,12 @@
 	margin-bottom: 10px;
 }
 
+#search-container {
+	width: 30%;
+}
+
 #search {
-	max-width: 500px;
+/* 	max-width: 500px; */
 /* 	display: inline-block; */
 }
 
