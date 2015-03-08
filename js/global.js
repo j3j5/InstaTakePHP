@@ -14,7 +14,7 @@ $downloadBtn.click(function() {
 		$downloadBtn.toggleClass('active');
 
 		$.ajax({
-			url: '/ajax.php',
+			url: '/ajax/',
 			type: 'POST',
 			data: { username: $search.val(), network: $network.val() },
 			success: function(msg) {

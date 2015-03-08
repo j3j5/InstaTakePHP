@@ -1,9 +1,5 @@
 <?php
 
-require('config.php');
-require("functions.php");
-
-
 if(!isset($_REQUEST['username'])){
 	echo json_encode(array('result' => 401, 'error' => 'Username missing.'));
 	exit;
@@ -30,3 +26,5 @@ if(isset($_REQUEST['max_pics']) && intval($_REQUEST['max_pics'])) {
 $result = $network($username);
 
 echo json_encode($result);
+// There's no view, so stop the execution here
+exit;
